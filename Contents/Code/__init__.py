@@ -88,9 +88,30 @@ def GetChannelList():
 ####################################################################################################
 @route('/video/mythrecordings/GetChannelsForSource', allow_sync=True)
 def GetChannelsForSource(sourceId):
-	Log('NOT IMPLEMENTED YET')
+
 	oc = ObjectContainer(title2=sourceId)
+
+	url = PVR_URL + 'Channel/GetVideoSourceList'
+	Log('GetVideoSourceList(): Loading URL %s' % (url))
+	request = urllib2.Request(url, headers={"Accept" : "application/xml"})
+	u = urllib2.urlopen(request)
+	tree = ET.parse(u)
+	root = tree.getroot()
+
+	channels = root.findall('ChannelInfos/ChannelInfo')
+
+	for channel in channels:
+		channelId = channel.find('ChanId').text
+		Log('Channel: %s', channelId)
+		channelName = channel.find('ChannelName').text
+		Log('ChannelName: %s', channelName)
+		oc.add(DirectoryObject(key=Callback(CreateRecordingOnLiveChannel, chanId=channelId), title = channelName))
 	return oc
+
+####################################################################################################
+@route('/video/mythrecordings/CreateRecordingOnLiveChannel', allow_sync=True)
+def CreateRecordingOnLiveChannel(chanId):
+	Log('NOT IMPLEMENTED YET')
 
 
 ####################################################################################################
