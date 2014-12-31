@@ -79,9 +79,9 @@ def GetChannelList():
 
 	for videoSource in videoSources:
 		Log('Element: %s', videoSource.tag)
-		Log('Source: %s', videoSource.find('Id'))
-		sourceId = videoSource.find('Id')
-		sourceName = videoSource.find('SourceName')
+		Log('Source: %s', videoSource.find('Id').text)
+		sourceId = videoSource.find('Id').text
+		sourceName = videoSource.find('SourceName').text
 		oc.add(DirectoryObject(key=Callback(GetChannelsForSource, sourceId=sourceId), title = sourceName))
 
 	return oc
