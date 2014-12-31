@@ -66,7 +66,7 @@ def GroupRecordingsBy(keyName):
 ####################################################################################################
 @route('/video/mythrecordings/GetChannelList', allow_sync=True)
 def GetChannelList():
-	oc = ObjectContainer(title2='Channels')
+	oc = ObjectContainer(title2='Sources')
 
 	url = PVR_URL + 'Channel/GetVideoSourceList'
 	Log('GetVideoSourceList(): Loading URL %s' % (url))
@@ -88,10 +88,9 @@ def GetChannelList():
 ####################################################################################################
 @route('/video/mythrecordings/GetChannelsForSource', allow_sync=True)
 def GetChannelsForSource(sourceId):
+	oc = ObjectContainer(title2='Channels')
 
-	oc = ObjectContainer(title2=sourceId)
-
-	url = PVR_URL + 'Channel/GetVideoSourceList'
+	url = PVR_URL + 'Channel/GetChannelInfoList'
 	Log('GetVideoSourceList(): Loading URL %s' % (url))
 	request = urllib2.Request(url, headers={"Accept" : "application/xml"})
 	u = urllib2.urlopen(request)
