@@ -90,7 +90,8 @@ def GetChannelList():
 def GetChannelsForSource(sourceId):
 	oc = ObjectContainer(title2='Channels')
 
-	url = PVR_URL + 'Channel/GetChannelInfoList'
+	url = PVR_URL + 'Channel/GetChannelInfoList?SourceID=%s' % (sourceId,)
+	#testURL = PVR_URL + 'Content/GetFile?StorageGroup=%s&FileName=%s' % (storageGroup,fileName,)
 	Log('GetVideoSourceList(): Loading URL %s' % (url))
 	request = urllib2.Request(url, headers={"Accept" : "application/xml"})
 	u = urllib2.urlopen(request)
