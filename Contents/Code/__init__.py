@@ -78,8 +78,8 @@ def GetChannelList():
 	videoSources = root.findall('VideoSources/VideoSource')
 
 	for videoSource in videoSources:
-		Log('Element: %s', videoSource)
-		Log('Source: %s', videoSource.find('VideoSource/Id'))
+		Log('Element: %s', videoSource.tag)
+		Log('Source: %s', videoSource.attrib)
 		sourceId = videoSource.find('VideoSource/Id')
 		sourceName = videoSource.find('VideoSource/SourceName')
 		oc.add(DirectoryObject(key=Callback(GetChannelsForSource, sourceId=sourceId), title = sourceName))
@@ -87,6 +87,7 @@ def GetChannelList():
 	return oc
 
 ####################################################################################################
+@route('/video/mythrecordings/GetChannelsForSource', allow_sync=True)
 def GetChannelsForSource(sourceId):
 	Log('NOT IMPLEMENTED YET')
 	oc = ObjectContainer(title2=sourceId)
