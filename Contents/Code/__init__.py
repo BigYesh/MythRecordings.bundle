@@ -105,7 +105,11 @@ def GetChannelsForSource(sourceId):
 		Log('Channel: %s', channelId)
 		channelName = channel.find('ChannelName').text
 		Log('ChannelName: %s', channelName)
-		oc.add(DirectoryObject(key=Callback(CreateRecordingOnLiveChannel, chanId=channelId), title = channelName))
+		channelNumber = channel.find('ChanNum').text
+		channelString =  '%s: %s'%(channelNumber, channelName,)
+		oc.add(DirectoryObject(key=Callback(CreateRecordingOnLiveChannel, chanId=channelId), title =channelString))
+
+	oc.objects.sort(key=lambda obj: obj.title)
 	return oc
 
 ####################################################################################################
