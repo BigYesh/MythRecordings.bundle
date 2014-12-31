@@ -26,6 +26,7 @@ def Start():
 @handler('/video/mythrecordings','MythTV recordings')
 def MainMenu():
     dir=ObjectContainer()
+    dir.add(DirectoryObject(key=Callback(GetChannelList), title='Live TV Channels'))
     dir.add(DirectoryObject(key=Callback(GroupRecordingsBy, keyName='Title'), title='Recordings by title'))
     dir.add(DirectoryObject(key=Callback(GroupRecordingsBy, keyName='Category'), title='Recordings by category'))
     dir.add(DirectoryObject(key=Callback(GroupRecordingsBy, keyName='Recording/RecGroup'), title='Recordings by recording group'))
@@ -61,6 +62,35 @@ def GroupRecordingsBy(keyName):
 		
 	oc.objects.sort(key=lambda obj: obj.title)
 	return oc
+
+####################################################################################################
+@route('/video/mythrecordings/GetChannelList', allow_sync=True)
+def GetChannelList():
+	oc = ObjectContainer(title2='Channels')
+
+	url = PVR_URL + 'Channel/GetVideoSourceList'
+	Log('GetVideoSourceList(): Loading URL %s' % (url))
+	request = urllib2.Request(url, headers={"Accept" : "application/xml"})
+	u = urllib2.urlopen(request)
+	tree = ET.parse(u)
+	root = tree.getroot()
+
+	videoSources = root.findall('VideoSources/VideoSource')
+
+	for videoSource in videoSources:
+		Log('Source: %s', videoSource.find('VideoSource/Id'))
+		sourceId = videoSource.find('VideoSource/Id')
+		sourceName = videoSource.find('VideoSource/SourceName')
+		oc.add(DirectoryObject(key=Callback(GetChannelsForSource, sourceId=sourceId), title = sourceName))
+
+	return oc
+
+####################################################################################################
+def GetChannelsForSource(sourceId):
+	Log('NOT IMPLEMENTED YET')
+	oc = ObjectContainer(title2=sourceId)
+	return oc
+
 
 ####################################################################################################
 @route('/video/mythrecordings/GetRecordingList', allow_sync=True)
