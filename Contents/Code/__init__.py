@@ -78,7 +78,7 @@ def GetChannelList():
 	videoSources = root.findall('VideoSources/VideoSource')
 
 	for videoSource in videoSources:
-		Log('Element: %s', videoSource.text)
+		Log('Element: %s', videoSource)
 		Log('Source: %s', videoSource.find('VideoSource/Id'))
 		sourceId = videoSource.find('VideoSource/Id')
 		sourceName = videoSource.find('VideoSource/SourceName')
